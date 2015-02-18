@@ -8,9 +8,9 @@ kaveh@pezeshki.org
 
 The 2015 OI is described in the following documents (potentially out of date):
 
-<p><a href="https://docs.google.com/document/d/1-BWv_VpO2KGuVvN3qlltaCp3rLe5aKPpKCXOMTD8Otc/edit?usp=sharing">OI Buttons</a>.</p>
+<p><a href="https://docs.google.com/document/d/1-BWv_VpO2KGuVvN3qlltaCp3rLe5aKPpKCXOMTD8Otc/edit?usp=sharing">OI Buttons</a></p>
 
-<p><a href="https://docs.google.com/document/d/1AfbShbp5Lmn5j9dMG43Zpw4TVNy1rpCjC5DWKS2fBRI/edit?usp=sharing">OI design</a>.</p>
+<p><a href="https://docs.google.com/document/d/1AfbShbp5Lmn5j9dMG43Zpw4TVNy1rpCjC5DWKS2fBRI/edit?usp=sharing">OI design</a></p>
 
 The OI will control the elevator, intake arms, and well as a variety of preprogrammed routines.
 
