@@ -43,22 +43,21 @@ int sensorValue = 0;
 void setup() {                
   // initialize the digital pin as an output.
   pinMode(led, OUTPUT);
-  pinMode(macroA, INPUT); 
-  pinMode(macroB, INPUT);  
-  pinMode(macroC, INPUT);  
-  pinMode(macroD, INPUT);  
-  pinMode(elevA, INPUT);
-  pinMode(elevB, INPUT);
-  pinMode(elevC, INPUT);
-  pinMode(elevD, INPUT);
-  pinMode(elevE, INPUT);
-  pinMode(elevF, INPUT);
-  pinMode(elevG, INPUT);
-  pinMode(calHigh, INPUT);
-  pinMode(calLow, INPUT);
+  pinMode(macroA, INPUT_PULLUP); 
+  pinMode(macroB, INPUT_PULLUP);  
+  pinMode(macroC, INPUT_PULLUP);  
+  pinMode(macroD, INPUT_PULLUP);
+  pinMode(elevB, INPUT_PULLUP);
+  pinMode(elevC, INPUT_PULLUP);
+  pinMode(elevD, INPUT_PULLUP);
+  pinMode(elevE, INPUT_PULLUP);
+  pinMode(elevF, INPUT_PULLUP);
+  pinMode(elevG, INPUT_PULLUP);
+  pinMode(calHigh, INPUT_PULLUP);
+  pinMode(calLow, INPUT_PULLUP);
   pinMode(motorA, OUTPUT);
   pinMode(motorB, OUTPUT);
-  pinMode(diskBrake, INPUT);
+  pinMode(diskBrake, INPUT_PULLUP);
   setupMegaJoy();
 }
 
@@ -117,9 +116,17 @@ megaJoyControllerData_t getControllerData(void){
   controllerData.buttonArray[9] = !digitalRead(rollerOut);
   controllerData.buttonArray[10] = !digitalRead(gripperOn);
   controllerData.buttonArray[11] = !digitalRead(gripperOff);
+  
+  controllerData.buttonArray[12] = !digitalRead(elevA); 
+  controllerData.buttonArray[13] = !digitalRead(elevB); 
+  controllerData.buttonArray[14] = !digitalRead(elevC);
+  controllerData.buttonArray[15] = !digitalRead(elevD); 
+  controllerData.buttonArray[16] = !digitalRead(elevE);
+  controllerData.buttonArray[17] = !digitalRead(elevF);
+  controllerData.buttonArray[18] = !digitalRead(elevG);
   /*   
    
-   Key for which name corresponds to which button
+   Key for which name corresponds to which button (NOT APPLICABLE)
    
    
    controllerData.triangleOn //macroA
