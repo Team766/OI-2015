@@ -1,20 +1,18 @@
-/*
-  Blink
- Turns on an LED on for one second, then off for one second, repeatedly.
- 
- This example code is in the public domain.
- */
-
-// Pin 13 has an LED connected on most Arduino boards.
-// give it a name:
 #include "MegaJoy.h"
 
+//LED to confirm Arduino power and operation
 int led = 13;
+
+//Macro buttons to perform teleop automated routines
 int macroA = 2;
 int macroB = 3;
 int macroC = 4;
 int macroD = 5;
+
+//To cancel elevator position change or macro
 int cancelButton = 6;
+
+//Preset elevator positions
 int elevA = 7;
 int elevB = 8;
 int elevC = 9;
@@ -22,47 +20,142 @@ int elevD = 10;
 int elevE = 11;
 int elevF = 12;
 int elevG = 13;
+
+//Will be a 3 position momentary toggle switch used to control the intake
 int rollerIn = 14;
 int rollerOut = 15;
+
+//A two position toggle to control gripper operation
 int gripperOn = 16;
-int gripperOff = 17;
-int calHigh = A0;
-int calLow = A1;
-int motorA = A2;
-int motorB = A3;
-int potIn = A4;
-int diskBrake = A5;
 
+//Another three position momentary toggle, this time to calibrate the elevator
+int calHigh = 17;
+int calLow = 18;
 
+//To control the motor on the slider
+int motorA = 19;
+int motorB = 20;
+
+//Input from the potentiometer on the slider
+int potIn = A0;
+
+//A two position toggle to control disk brake operation 
+int diskBrake = 21;
+
+//To control accuracy of the slider proportional loop
 int acceptableError = 20;
-int speedSlider = 0;
+
+//To control the speed of the slider
+int speedSlider = 0.02;
+
+//Will hold position of the slider
 int sensorValue = 0;
 
 
-// the setup routine runs once when you press reset:
+
 void setup() {                
-  // initialize the digital pin as an output.
+  //sets up pins as outputs / inputs
   pinMode(led, OUTPUT);
+  digitalWrite(LED, HIGH);
+  
   pinMode(macroA, INPUT_PULLUP); 
   pinMode(macroB, INPUT_PULLUP);  
   pinMode(macroC, INPUT_PULLUP);  
   pinMode(macroD, INPUT_PULLUP);
+  
+  pinMode(cancelButton, INPUT_PULLUP);
+  
   pinMode(elevB, INPUT_PULLUP);
   pinMode(elevC, INPUT_PULLUP);
   pinMode(elevD, INPUT_PULLUP);
   pinMode(elevE, INPUT_PULLUP);
   pinMode(elevF, INPUT_PULLUP);
   pinMode(elevG, INPUT_PULLUP);
+  
+  pinMode(rollerIn, INPUT_PULLUP);
+  pinMode(rollerOut, INPUT_PULLUP);
+  
+  pinMode(gripperOn, INPUT_PULLUP);
+  
   pinMode(calHigh, INPUT_PULLUP);
   pinMode(calLow, INPUT_PULLUP);
+  
   pinMode(motorA, OUTPUT);
   pinMode(motorB, OUTPUT);
+  
   pinMode(diskBrake, INPUT_PULLUP);
+  
   setupMegaJoy();
 }
 
-// the loop routine runs over and over again forever:
+
 void loop() {
+  
+
+  //Megajoy setup stuff, calls controller setup method
+  megaJoyControllerData_t controllerData = getControllerData();
+  setControllerData(controllerData);   
+}
+
+megaJoyControllerData_t getControllerData(void){
+
+  // Set up a place for our controller data
+  //  Use the getBlankDataForController() function, since
+  //  just declaring a fresh dataForController_t tends
+  //  to get you one filled with junk from other, random
+  //  values that were in those memory locations before
+  megaJoyControllerData_t controllerData = getBlankDataForMegaController();
+  // Since our buttons are all held high and
+  //  pulled low when pressed, we use the "!"
+  //  operator to invert the readings from the pins
+
+
+  //sets directinput pins to current OI button outputs
+  controllerData.buttonArray[0] = !digitalRead(macroA); 
+  controllerData.buttonArray[1] = !digitalRead(macroB); 
+  controllerData.buttonArray[2] = !digitalRead(macroC);
+  controllerData.buttonArray[3] = !digitalRead(macroD);
+  
+  controllerData.buttonArray[4] = !digitalRead(cancelButton);
+  controllerData.buttonArray[5] = !digitalRead(calHigh);
+  controllerData.buttonArray[6] = !digitalRead(calLow);
+  controllerData.buttonArray[7] = !digitalRead(diskBrake);
+  controllerData.buttonArray[8] = !digitalRead(rollerIn);
+  controllerData.buttonArray[9] = !digitalRead(rollerOut);
+  controllerData.buttonArray[10] = !digitalRead(gripperOn);
+  
+  controllerData.buttonArray[11] = !digitalRead(elevA); 
+  controllerData.buttonArray[12] = !digitalRead(elevB); 
+  controllerData.buttonArray[13] = !digitalRead(elevC);
+  controllerData.buttonArray[14] = !digitalRead(elevD); 
+  controllerData.buttonArray[15] = !digitalRead(elevE);
+  controllerData.buttonArray[16] = !digitalRead(elevF);
+  controllerData.buttonArray[17] = !digitalRead(elevG);
+  
+  
+  /*
+  // Test here, the UnoJoy interface will not work
+   // with this enabled
+   for (int i = 2; i <= 10; i++){
+   if(!digitalRead(i)){
+   Serial.println("on:");
+   Serial.print(i);
+   }
+   //    digitalWrite(i, HIGH);
+   }*/
+
+
+  //For 2015 we only have 1 analog axis, which
+  //is the slider
+
+  //sets sensorValue var to position of slider
+  sensorValue = analogRead(potIn);
+
+   // And return the data!
+  return controllerData;
+
+  // will move elevator to correct position on button press
+  //Is after data return so button updates will be instantaneous
   if(digitalRead(elevA) == HIGH) {
     moveToArea(995);
   }
@@ -84,138 +177,61 @@ void loop() {
   else if(digitalRead(elevG) == HIGH) {
     moveToArea(25);
   }
-
-
-  megaJoyControllerData_t controllerData = getControllerData();
-  setControllerData(controllerData);   
-}
-
-megaJoyControllerData_t getControllerData(void){
-
-  // Set up a place for our controller data
-  //  Use the getBlankDataForController() function, since
-  //  just declaring a fresh dataForController_t tends
-  //  to get you one filled with junk from other, random
-  //  values that were in those memory locations before
-  megaJoyControllerData_t controllerData = getBlankDataForMegaController();
-  // Since our buttons are all held high and
-  //  pulled low when pressed, we use the "!"
-  //  operator to invert the readings from the pins
-
-
-
-  controllerData.buttonArray[0] = !digitalRead(macroA); 
-  controllerData.buttonArray[1] = !digitalRead(macroB); 
-  controllerData.buttonArray[2] = !digitalRead(macroC);
-  controllerData.buttonArray[3] = !digitalRead(macroD); 
-  controllerData.buttonArray[4] = !digitalRead(cancelButton);
-  controllerData.buttonArray[5] = !digitalRead(calHigh);
-  controllerData.buttonArray[6] = !digitalRead(calLow);
-  controllerData.buttonArray[7] = !digitalRead(diskBrake);
-  controllerData.buttonArray[8] = !digitalRead(rollerIn);
-  controllerData.buttonArray[9] = !digitalRead(rollerOut);
-  controllerData.buttonArray[10] = !digitalRead(gripperOn);
-  controllerData.buttonArray[11] = !digitalRead(gripperOff);
   
-  controllerData.buttonArray[12] = !digitalRead(elevA); 
-  controllerData.buttonArray[13] = !digitalRead(elevB); 
-  controllerData.buttonArray[14] = !digitalRead(elevC);
-  controllerData.buttonArray[15] = !digitalRead(elevD); 
-  controllerData.buttonArray[16] = !digitalRead(elevE);
-  controllerData.buttonArray[17] = !digitalRead(elevF);
-  controllerData.buttonArray[18] = !digitalRead(elevG);
-  /*   
-   
-   Key for which name corresponds to which button (NOT APPLICABLE)
-   
-   
-   controllerData.triangleOn //macroA
-   controllerData.circleOn //macroB
-   controllerData.squareOn //macroC
-   controllerData.crossOn //macroD
-   controllerData.dpadUpOn //not used
-   controllerData.dpadDownOn //not used
-   controllerData.dpadLeftOn //not used
-   controllerData.dpadRightOn //not used
-   controllerData.l1On      //cancelButton
-   controllerData.r1On      //calHigh
-   controllerData.selectOn  //calLow
-   controllerData.startOn   //diskBrake
-   controllerData.l2On      //rollerIn
-   controllerdata.r2On      //rollerOut
-   controllerData.l3On      //gripperOn
-   controllerData.r3On      //gripperOff
-   controllerData.homeOn //button 13 */
-
-  /*
-  // Test here, the UnoJoy interface will not work
-   // with this enabled
-   for (int i = 2; i <= 10; i++){
-   if(!digitalRead(i)){
-   Serial.println("on:");
-   Serial.print(i);
-   }
-   //    digitalWrite(i, HIGH);
-   }*/
-
-  // Set the analog sticks
-  //  Since analogRead(pin) returns a 10 bit value,
-  //  we need to perform a bit shift operation to
-  //  lose the 2 least significant bits and get an
-  //  8 bit number that we can use  
-
-  //For 2015 we only have 1 analog axis, which
-  //is the slider
-
-  sensorValue = analogRead(potIn);
-
+  //Sets analog axis equal to slider value
   controllerData.analogAxisArray[0] = sensorValue;
-
-
-
-  //  Serial.println(analogRead(A0));
-
-  // And return the data!
-  return controllerData;
+ 
 }
 
 void moveToArea(int desiredCoord) {
+  //sets sensorVal var to position of slider
   sensorValue = analogRead(potIn);
+  
+  //This loop will move the slider UP to desired position
+  //Will move the slider up in steps proportional to the difference between the current and desired position
   while(sensorValue > (desiredCoord + acceptableError)) {
     sensorValue = analogRead(potIn);
-
+  
+    //moves slider UP for time proportional to error
     digitalWrite(motorA, HIGH);
     digitalWrite(motorB, LOW);
     delay(abs(speedSlider*(desiredCoord-sensorValue)));
+    
+    //turns both motor ouputs LOW. The motor outputs cannot both be HIGH at the same time as that will blow the H-Bridge transistors
     digitalWrite(motorA, LOW);
     digitalWrite(motorB, LOW);
-    /*Serial.print("Current pos: ");
-    Serial.print(sensorValue);
-    Serial.print(" Desired coordinate ");
-    Serial.println(desiredCoord);
-    Serial.println("moving up..."); */
+   
   }
+  
+  //More safety stuff to make sure both outputs are not HIGH at the same time
   digitalWrite(motorA, LOW);
   digitalWrite(motorB, LOW);
+  
+  
+  //This loop will move the slider DOWN to desired position.
+  //Will move the slider down in steps proportional to the difference between the current and desired position
   while(sensorValue < (desiredCoord - acceptableError)) {
     sensorValue = analogRead(potIn);
 
+    //moves slider UP for time proportional to error
     digitalWrite(motorA, LOW);
     digitalWrite(motorB, HIGH);
     delay(abs(speedSlider*(desiredCoord-sensorValue)));
+    
+    //turns both motor ouputs LOW. The motor outputs cannot both be HIGH at the same time as that will blow the H-Bridge transistors
     digitalWrite(motorA, LOW);
     digitalWrite(motorB, LOW);
-    /* Serial.print("Current pos: ");
-    Serial.print(sensorValue);
-    Serial.print(" Desired coordinate ");
-    Serial.println(desiredCoord);
-    Serial.println("moving down..."); */
+    
   }
+  
+  //More safety stuff to make sure both outputs are not HIGH at the same time
   digitalWrite(motorA, LOW);
   digitalWrite(motorB, LOW);
   Serial.println("Done");
 }
 
+
+//copy of Arduino map function that will return a float instead of an int
 float mapAsFloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
