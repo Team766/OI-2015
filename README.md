@@ -33,6 +33,8 @@ The elevator claw will be controlled by a two position toggle switch.
 
 There will be a three position momentary toggle for slider calibration.
 
+<strong>DO NOT EVER MAKE BOTH H-BRIDGE INPUTS HIGH: THIS WILL DESTROY THE H-BRIDGE AND COULD DESTROY THE ARDDUINO</strong>
+
 <strong>Intake arms:</strong>
 
 The intake arms are controlled by a three position momentary toggle switch. The roboRIO will interpret these commands and run an automated sequence that will either pull a tote in or push it out.
