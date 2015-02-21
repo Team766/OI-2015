@@ -96,7 +96,8 @@ void loop() {
 
   //Megajoy setup stuff, calls controller setup method
   megaJoyControllerData_t controllerData = getControllerData();
-  setControllerData(controllerData);   
+  setControllerData(controllerData);
+  ButtonPressToMove();
 }
 
 megaJoyControllerData_t getControllerData(void){
@@ -152,12 +153,22 @@ megaJoyControllerData_t getControllerData(void){
 
   //sets sensorValue var to position of slider
   sensorValue = analogRead(potIn);
+  
+  //Sets analog axis equal to slider value
+  controllerData.analogAxisArray[0] = sensorValue;
 
    // And return the data!
   return controllerData;
 
-  // will move elevator to correct position on button press
-  //Is after data return so button updates will be instantaneous
+
+  
+ 
+}
+
+// will move elevator to correct position on button press
+//Is after data return so button updates will be instantaneous
+void ButtonPressToMove() {
+  
   if(digitalRead(elevA) == HIGH) {
     moveToArea(995);
   }
@@ -179,10 +190,6 @@ megaJoyControllerData_t getControllerData(void){
   else if(digitalRead(elevG) == HIGH) {
     moveToArea(25);
   }
-  
-  //Sets analog axis equal to slider value
-  controllerData.analogAxisArray[0] = sensorValue;
- 
 }
 
 void moveToArea(int desiredCoord) {
