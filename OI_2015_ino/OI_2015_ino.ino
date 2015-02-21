@@ -53,7 +53,8 @@ int sensorValue = 0;
 
 
 
-void setup() {                
+void setup() {   
+  
   //sets up pins as outputs / inputs
   pinMode(led, OUTPUT);
   digitalWrite(LED, HIGH);
@@ -85,6 +86,7 @@ void setup() {
   
   pinMode(diskBrake, INPUT_PULLUP);
   
+  //General megajoy setup stuff
   setupMegaJoy();
 }
 
