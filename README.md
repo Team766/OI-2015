@@ -22,8 +22,10 @@ In order to keep the slider in sync with the elevator when buttons are used, the
 The sequence when a button is pressed:
 
 1. Button pressed
-2. Slider moves to correct position
-3. Updated button states reported to host computer
+2. Updated button states reported to host computer
+3. Slider moves to correct position
+
+While the slider is moving the slider axis will be set to 0.
 
 The preferred method here would be for the axis values to be updated immediately after the button is pressed.
 
