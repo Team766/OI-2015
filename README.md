@@ -33,7 +33,7 @@ The elevator claw will be controlled by a two position toggle switch.
 
 There will be a three position momentary toggle for slider calibration.
 
-<strong>DO NOT EVER MAKE BOTH H-BRIDGE INPUTS HIGH: THIS WILL DESTROY THE H-BRIDGE AND COULD BLOW THE ARDDUINO</strong>
+<strong>DO NOT EVER MAKE BOTH H-BRIDGE INPUTS HIGH: THIS WILL DESTROY THE H-BRIDGE AND COULD BLOW THE ARDUINO</strong>
 
 <strong>Intake arms:</strong>
 
