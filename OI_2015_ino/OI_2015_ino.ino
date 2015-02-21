@@ -36,7 +36,7 @@ int calLow = 18;
 int motorA = 19;
 int motorB = 20;
 
-//Input from the potentiometer on the slider
+//Input from the potentiometer on the slider, A0 denotes analog input 0
 int potIn = A0;
 
 //A two position toggle to control disk brake operation 
