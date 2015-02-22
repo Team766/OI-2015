@@ -161,7 +161,7 @@ megaJoyControllerData_t getControllerData(void){
   sensorValue = analogRead(potIn);
   
   //Sets analog axis equal to slider value
-  controllerData.analogAxisArray[0] = sensorValue;
+  controllerData.analogAxisArray[0] = sensorValue >> 2;
 
    // And return the data!
   return controllerData;
