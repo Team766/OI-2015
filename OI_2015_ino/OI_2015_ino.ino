@@ -242,7 +242,6 @@ void moveToArea(int desiredCoord) {
   //More safety stuff to make sure both outputs are not HIGH at the same time
   digitalWrite(motorA, LOW);
   digitalWrite(motorB, LOW);
-  Serial.println("Done");
 }
 
 
