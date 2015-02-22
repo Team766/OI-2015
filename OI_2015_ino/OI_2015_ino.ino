@@ -8,39 +8,41 @@ int macroA = 2;
 int macroB = 3;
 int macroC = 4;
 int macroD = 5;
+int macroE = 6;
 
 //To cancel elevator position change or macro
-int cancelButton = 6;
+int cancelButton = 7;
 
 //Preset elevator positions
-int elevA = 7;
-int elevB = 8;
-int elevC = 9;
-int elevD = 10;
-int elevE = 11;
-int elevF = 12;
-int elevG = 13;
+int elevA = 8;
+int elevB = 9;
+int elevC = 10;
+int elevD = 11;
+int elevE = 12;
+int elevF = 13;
+int elevG = 14;
+int elevH = 15;
 
 //Will be a 3 position momentary toggle switch used to control the intake
-int rollerIn = 14;
-int rollerOut = 15;
+int rollerIn = 16;
+int rollerOut = 17;
 
 //A two position toggle to control gripper operation
-int gripperOn = 16;
+int gripperOn = 18;
 
 //Another three position momentary toggle, this time to calibrate the elevator
-int calHigh = 17;
-int calLow = 18;
+int calHigh = 19;
+int calLow = 20;
 
 //To control the motor on the slider
-int motorA = 19;
-int motorB = 20;
+int motorA = 21;
+int motorB = 22;
 
 //Input from the potentiometer on the slider, A0 denotes analog input 0
 int potIn = A0;
 
 //A two position toggle to control disk brake operation 
-int diskBrake = 21;
+int diskBrake = 23;
 
 //To control accuracy of the slider proportional loop
 int acceptableError = 20;
@@ -63,6 +65,7 @@ void setup() {
   pinMode(macroB, INPUT_PULLUP);  
   pinMode(macroC, INPUT_PULLUP);  
   pinMode(macroD, INPUT_PULLUP);
+  pinMode(macroE, INPUT_PULLUP);
   
   pinMode(cancelButton, INPUT_PULLUP);
   
@@ -72,6 +75,7 @@ void setup() {
   pinMode(elevE, INPUT_PULLUP);
   pinMode(elevF, INPUT_PULLUP);
   pinMode(elevG, INPUT_PULLUP);
+  pinMode(elevH, INPUT_PULLUP);
   
   pinMode(rollerIn, INPUT_PULLUP);
   pinMode(rollerOut, INPUT_PULLUP);
@@ -118,22 +122,24 @@ megaJoyControllerData_t getControllerData(void){
   controllerData.buttonArray[1] = !digitalRead(macroB); 
   controllerData.buttonArray[2] = !digitalRead(macroC);
   controllerData.buttonArray[3] = !digitalRead(macroD);
+  controllerData.buttonArray[4] = !digitalRead(macroE);
   
-  controllerData.buttonArray[4] = !digitalRead(cancelButton);
-  controllerData.buttonArray[5] = !digitalRead(calHigh);
-  controllerData.buttonArray[6] = !digitalRead(calLow);
-  controllerData.buttonArray[7] = !digitalRead(diskBrake);
-  controllerData.buttonArray[8] = !digitalRead(rollerIn);
-  controllerData.buttonArray[9] = !digitalRead(rollerOut);
-  controllerData.buttonArray[10] = !digitalRead(gripperOn);
+  controllerData.buttonArray[5] = !digitalRead(cancelButton);
+  controllerData.buttonArray[6] = !digitalRead(calHigh);
+  controllerData.buttonArray[7] = !digitalRead(calLow);
+  controllerData.buttonArray[8] = !digitalRead(diskBrake);
+  controllerData.buttonArray[9] = !digitalRead(rollerIn);
+  controllerData.buttonArray[10] = !digitalRead(rollerOut);
+  controllerData.buttonArray[11] = !digitalRead(gripperOn);
   
-  controllerData.buttonArray[11] = !digitalRead(elevA); 
-  controllerData.buttonArray[12] = !digitalRead(elevB); 
-  controllerData.buttonArray[13] = !digitalRead(elevC);
-  controllerData.buttonArray[14] = !digitalRead(elevD); 
-  controllerData.buttonArray[15] = !digitalRead(elevE);
-  controllerData.buttonArray[16] = !digitalRead(elevF);
-  controllerData.buttonArray[17] = !digitalRead(elevG);
+  controllerData.buttonArray[12] = !digitalRead(elevA); 
+  controllerData.buttonArray[13] = !digitalRead(elevB); 
+  controllerData.buttonArray[14] = !digitalRead(elevC);
+  controllerData.buttonArray[15] = !digitalRead(elevD); 
+  controllerData.buttonArray[16] = !digitalRead(elevE);
+  controllerData.buttonArray[17] = !digitalRead(elevF);
+  controllerData.buttonArray[18] = !digitalRead(elevG);
+  controllerData.buttonArray[19] = !digitalRead(elevH);
   
   
   /*
