@@ -33,6 +33,8 @@ The elevator claw will be controlled by a two position toggle switch.
 
 There will be a three position momentary toggle for slider calibration.
 
+A two position toggle switch will set elevator to brake or stop on loss of input.
+
 <strong>DO NOT EVER SET BOTH H-BRIDGE INPUTS HIGH: THIS WILL DESTROY THE H-BRIDGE AND COULD BLOW THE ARDUINO</strong>
 
 <strong>Intake arms:</strong>
@@ -41,4 +43,4 @@ The intake arms are controlled by a three position momentary toggle switch. The 
 
 <strong>Macro buttons:</strong>
 
-There will be four buttons used to initiate routines during the teleoperated period of a match. These will also be used to select autonomous routines.
+There will be five buttons used to initiate routines during the teleoperated period of a match. These will also be used to select autonomous routines.
