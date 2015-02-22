@@ -175,25 +175,28 @@ megaJoyControllerData_t getControllerData(void){
 //Is after data return so button updates will be instantaneous
 void ButtonPressToMove() {
   
-  if(digitalRead(elevA) == HIGH) {
+  if(digitalRead(elevA) != HIGH) {
     moveToArea(995);
   }
-  else if(digitalRead(elevB) == HIGH) {
-    moveToArea(825);
+  else if(digitalRead(elevB) != HIGH) {
+    moveToArea(877);
   }
-  else if(digitalRead(elevC) == HIGH) {
-    moveToArea(654);
+  else if(digitalRead(elevC) != HIGH) {
+    moveToArea(731);
   }
-  else if(digitalRead(elevD) == HIGH) {
-    moveToArea(493);
+  else if(digitalRead(elevD) != HIGH) {
+    moveToArea(585);
   }
-  else if(digitalRead(elevE) == HIGH) {
-    moveToArea(337);
+  else if(digitalRead(elevE) != HIGH) {
+    moveToArea(438);
   }
-  else if(digitalRead(elevF) == HIGH) {
-    moveToArea(178);
+  else if(digitalRead(elevF) != HIGH) {
+    moveToArea(292);
   }
-  else if(digitalRead(elevG) == HIGH) {
+  else if(digitalRead(elevG) != HIGH) {
+    moveToArea(146);
+  }
+  else if(digitalRead(elevH) != HIGH) {
     moveToArea(25);
   }
 }
