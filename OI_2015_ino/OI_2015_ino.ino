@@ -161,7 +161,9 @@ megaJoyControllerData_t getControllerData(void){
   sensorValue = analogRead(potIn);
   
   //Sets analog axis equal to slider value
-  controllerData.analogAxisArray[0] = sensorValue >> 2;
+  //Megajoy looks for an 8 bit analog value but the analogRead() function returns a 10 bit value
+  //Mapping sensorValue to a range of 0-255 will ensure an 8 bit value is returned
+  controllerData.analogAxisArray[0] = map(sensorValue, 0, 1023, 0, 255);
 
    // And return the data!
   return controllerData;
