@@ -59,7 +59,7 @@ void setup() {
   
   //sets up pins as outputs / inputs
   pinMode(led, OUTPUT);
-  digitalWrite(LED, HIGH);
+  digitalWrite(led, HIGH);
   
   pinMode(macroA, INPUT_PULLUP); 
   pinMode(macroB, INPUT_PULLUP);  
