@@ -69,6 +69,7 @@ void setup() {
   
   pinMode(cancelButton, INPUT_PULLUP);
   
+  pinMode(elevA, INPUT_PULLUP);
   pinMode(elevB, INPUT_PULLUP);
   pinMode(elevC, INPUT_PULLUP);
   pinMode(elevD, INPUT_PULLUP);
@@ -118,28 +119,28 @@ megaJoyControllerData_t getControllerData(void){
 
 
   //sets directinput pins to current OI button outputs
-  controllerData.buttonArray[0] = !digitalRead(macroA); 
-  controllerData.buttonArray[1] = !digitalRead(macroB); 
-  controllerData.buttonArray[2] = !digitalRead(macroC);
-  controllerData.buttonArray[3] = !digitalRead(macroD);
-  controllerData.buttonArray[4] = !digitalRead(macroE);
+ controllerData.buttonArray[0] = (!digitalRead(macroA) << 0);
+  controllerData.buttonArray[0] |= (!digitalRead(macroB) << 1); 
+  controllerData.buttonArray[0] |= (!digitalRead(macroC) << 2);
+  controllerData.buttonArray[0] |= (!digitalRead(macroD) << 3);
+  controllerData.buttonArray[0] |= (!digitalRead(macroE) << 4);
   
-  controllerData.buttonArray[5] = !digitalRead(cancelButton);
-  controllerData.buttonArray[6] = !digitalRead(calHigh);
-  controllerData.buttonArray[7] = !digitalRead(calLow);
-  controllerData.buttonArray[8] = !digitalRead(diskBrake);
-  controllerData.buttonArray[9] = !digitalRead(rollerIn);
-  controllerData.buttonArray[10] = !digitalRead(rollerOut);
-  controllerData.buttonArray[11] = !digitalRead(gripperOn);
+  controllerData.buttonArray[0] |= (!digitalRead(cancelButton) << 5);
+  controllerData.buttonArray[0] |= (!digitalRead(calHigh) << 6);
+  controllerData.buttonArray[0] |= (!digitalRead(calLow) << 7);
+  controllerData.buttonArray[1] = (!digitalRead(diskBrake) << 0);
+  controllerData.buttonArray[1] |= (!digitalRead(rollerIn) << 1);
+  controllerData.buttonArray[1] |= (!digitalRead(rollerOut) << 2);
+  controllerData.buttonArray[1] |= (!digitalRead(gripperOn) << 3);
   
-  controllerData.buttonArray[12] = !digitalRead(elevA); 
-  controllerData.buttonArray[13] = !digitalRead(elevB); 
-  controllerData.buttonArray[14] = !digitalRead(elevC);
-  controllerData.buttonArray[15] = !digitalRead(elevD); 
-  controllerData.buttonArray[16] = !digitalRead(elevE);
-  controllerData.buttonArray[17] = !digitalRead(elevF);
-  controllerData.buttonArray[18] = !digitalRead(elevG);
-  controllerData.buttonArray[19] = !digitalRead(elevH);
+  controllerData.buttonArray[1] |= (!digitalRead(elevA) << 4);
+  controllerData.buttonArray[1] |= (!digitalRead(elevB) << 5);
+  controllerData.buttonArray[1] |= (!digitalRead(elevC) << 6);
+  controllerData.buttonArray[1] |= (!digitalRead(elevD) << 7); 
+  controllerData.buttonArray[2] = (!digitalRead(elevE) << 0); 
+  controllerData.buttonArray[2] |= (!digitalRead(elevF) << 1); 
+  controllerData.buttonArray[2] |= (!digitalRead(elevG) << 2); 
+  controllerData.buttonArray[2] |= (!digitalRead(elevH) << 3); 
   
   
   /*
