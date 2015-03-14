@@ -2,6 +2,7 @@
 
 //LED to confirm Arduino power and operation
 int led = 13;
+int ledGround = 50;
 
 //Macro buttons to perform teleop automated routines
 int macroA = 2;
@@ -59,7 +60,9 @@ void setup() {
   
   //sets up pins as outputs / inputs
   pinMode(led, OUTPUT);
-  digitalWrite(led, HIGH);
+  digitalWrite(led, LOW);
+  pinMode(ledGround, OUTPUT);
+  digitalWrite(ledGround, LOW);
   
   pinMode(macroA, INPUT_PULLUP); 
   pinMode(macroB, INPUT_PULLUP);  
@@ -98,7 +101,7 @@ void setup() {
 
 void loop() {
   
-
+  digitalWrite(led, HIGH);
   //Megajoy setup stuff, calls controller setup method
   megaJoyControllerData_t controllerData = getControllerData();
   setControllerData(controllerData);
@@ -128,10 +131,10 @@ megaJoyControllerData_t getControllerData(void){
   controllerData.buttonArray[0] |= (!digitalRead(cancelButton) << 5);
   controllerData.buttonArray[0] |= (!digitalRead(calHigh) << 6);
   controllerData.buttonArray[0] |= (!digitalRead(calLow) << 7);
-  controllerData.buttonArray[1] = (!digitalRead(diskBrake) << 0);
+  controllerData.buttonArray[1] = (digitalRead(diskBrake) << 0);
   controllerData.buttonArray[1] |= (!digitalRead(rollerIn) << 1);
   controllerData.buttonArray[1] |= (!digitalRead(rollerOut) << 2);
-  controllerData.buttonArray[1] |= (!digitalRead(gripperOn) << 3);
+  controllerData.buttonArray[1] |= (digitalRead(gripperOn) << 3);
   
   controllerData.buttonArray[1] |= (!digitalRead(elevA) << 4);
   controllerData.buttonArray[1] |= (!digitalRead(elevB) << 5);
