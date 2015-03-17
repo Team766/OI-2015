@@ -273,14 +273,16 @@ void moveToArea(int desiredCoord) {
     if (sensorValue < (desiredCoord - acceptableError)) {
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, HIGH);
-      delay(1);
+      megaJoyControllerData_t controllerData = getControllerData();
+      setControllerData(controllerData);
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, LOW);
     }
     if (sensorValue > (desiredCoord + acceptableError)) {
       digitalWrite(motorA, HIGH);
       digitalWrite(motorB, LOW);
-      delay(1);
+      megaJoyControllerData_t controllerData = getControllerData();
+      setControllerData(controllerData);
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, LOW);
     }
