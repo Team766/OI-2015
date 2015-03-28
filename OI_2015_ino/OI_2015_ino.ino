@@ -27,6 +27,8 @@ int elevH = 15;
 //Will be a 3 position momentary toggle switch used to control the intake
 int rollerIn = 16;
 int rollerOut = 17;
+int rollerBIn = 24;
+int rollerBOut = 25;
 
 //A two position toggle to control gripper operation
 int gripperOn = 18;
@@ -46,7 +48,7 @@ int potIn = A0;
 int diskBrake = 23;
 
 //To control accuracy of the slider proportional loop
-int acceptableError = 20;
+int acceptableError = 30;
 
 //To control the speed of the slider
 int speedSlider = 0.02;
@@ -54,15 +56,12 @@ int speedSlider = 0.02;
 //Will hold position of the slider
 int sensorValue = 0;
 
-
-
-
 void setup() {
 
   //sets up pins as outputs / inputs
   pinMode(led, OUTPUT);
-  digitalWrite(led, LOW);
   pinMode(ledGround, OUTPUT);
+  digitalWrite(led, HIGH);
   digitalWrite(ledGround, LOW);
 
   pinMode(macroA, INPUT_PULLUP);
@@ -84,6 +83,8 @@ void setup() {
 
   pinMode(rollerIn, INPUT_PULLUP);
   pinMode(rollerOut, INPUT_PULLUP);
+  pinMode(rollerBIn, INPUT_PULLUP);
+  pinMode(rollerBOut, INPUT_PULLUP);
 
   pinMode(gripperOn, INPUT_PULLUP);
 
@@ -98,21 +99,16 @@ void setup() {
 
   //General megajoy setup stuff
   setupMegaJoy();
+
+  delay(1000);
+  digitalWrite(led, LOW);
 }
 
 
 void loop() {
-
-  digitalWrite(led, HIGH);
-  /*digitalWrite(motorA, HIGH);
-  digitalWrite(motorB, LOW);
-  delay(100);
-  digitalWrite(motorA, LOW);
-  digitalWrite(motorB, HIGH);
-  delay(100);*/
-  //digitalWrite(motorA, HIGH);
   //Megajoy setup stuff, calls controller setup method
   megaJoyControllerData_t controllerData = getControllerData();
+  controllerData.buttonArray[2] |= (HIGH << 7);
   setControllerData(controllerData);
   ButtonPressToMove();
 }
@@ -155,6 +151,11 @@ megaJoyControllerData_t getControllerData(void) {
   controllerData.buttonArray[2] |= (!digitalRead(elevF) << 2);
   controllerData.buttonArray[2] |= (!digitalRead(elevG) << 3);
   controllerData.buttonArray[2] |= (!digitalRead(elevH) << 4);
+  controllerData.buttonArray[2] |= (!digitalRead(rollerBIn) << 5);
+  controllerData.buttonArray[2] |= (!digitalRead(rollerBOut) << 6);
+
+
+
 
   /*
   // Test here, the UnoJoy interface will not work
@@ -179,6 +180,11 @@ megaJoyControllerData_t getControllerData(void) {
   //Mapping sensorValue to a range of 0-255 will ensure an 8 bit value is returned
   controllerData.analogAxisArray[0] = map(sensorValue, 0, 1023, 0, 255);
 
+
+
+
+
+
   // And return the data!
   return controllerData;
 
@@ -192,80 +198,37 @@ megaJoyControllerData_t getControllerData(void) {
 void ButtonPressToMove() {
 
   if (digitalRead(elevA) != HIGH) {
-    moveToArea(25);
+    moveToArea(1);
   }
   else if (digitalRead(elevB) != HIGH) {
-    moveToArea(146);
+    moveToArea(2);
   }
   else if (digitalRead(elevC) != HIGH) {
-    moveToArea(292);
+    moveToArea(3);
   }
   else if (digitalRead(elevD) != HIGH) {
-    moveToArea(438);
+    moveToArea(4);
   }
   else if (digitalRead(elevE) != HIGH) {
-    moveToArea(583);
+    moveToArea(5);
   }
   else if (digitalRead(elevF) != HIGH) {
-    moveToArea(731);
+    moveToArea(6);
   }
   else if (digitalRead(elevG) != HIGH) {
-    moveToArea(877);
+    moveToArea(7);
   }
-  else if (digitalRead(elevH) != HIGH) {
-    moveToArea(995);
+  else if (digitalRead(elevH != HIGH)) {
+    //NOT USED
   }
 }
 
-//NOT WORKING
-/*void moveToArea(int desiredCoord) {
-  //sets sensorVal var to position of slider
-  sensorValue = analogRead(potIn);
-
-  //This loop will move the slider UP to desired position
-  //Will move the slider up in steps proportional to the difference between the current and desired position
-  while(sensorValue > (desiredCoord + acceptableError)) {
-    sensorValue = analogRead(potIn);
-
-    //moves slider UP for time proportional to error
-    digitalWrite(motorA, HIGH);
-    digitalWrite(motorB, LOW);
-    delay(abs(speedSlider*(desiredCoord-sensorValue)));
-
-    //turns both motor ouputs LOW. The motor outputs cannot both be HIGH at the same time as that will blow the H-Bridge transistors
-    digitalWrite(motorA, LOW);
-    digitalWrite(motorB, LOW);
-
-  }
-
-  //More safety stuff to make sure both outputs are not HIGH at the same time
-  digitalWrite(motorA, LOW);
-  digitalWrite(motorB, LOW);
-
-
-  //This loop will move the slider DOWN to desired position.
-  //Will move the slider down in steps proportional to the difference between the current and desired position
-  while(sensorValue < (desiredCoord - acceptableError)) {
-    sensorValue = analogRead(potIn);
-
-    //moves slider UP for time proportional to error
-    digitalWrite(motorA, LOW);
-    digitalWrite(motorB, HIGH);
-    delay(abs(speedSlider*(desiredCoord-sensorValue)));
-
-    //turns both motor ouputs LOW. The motor outputs cannot both be HIGH at the same time as that will blow the H-Bridge transistors
-    digitalWrite(motorA, LOW);
-    digitalWrite(motorB, LOW);
-
-  }
-
-  //More safety stuff to make sure both outputs are not HIGH at the same time
-  digitalWrite(motorA, LOW);
-  digitalWrite(motorB, LOW);
-}*/
 
 //Uses old movement system, not as fast but confirmed working
-void moveToArea(int desiredCoord) {
+void moveToArea(int desiredPos) {
+  int desiredCoord = map(desiredPos, 1, 7, 50, 974);
+
+  digitalWrite(led, HIGH);
   while ((sensorValue < (desiredCoord - acceptableError)) || (sensorValue > (desiredCoord + acceptableError))) {
     digitalWrite(motorA, LOW);
     digitalWrite(motorB, LOW);
@@ -273,20 +236,21 @@ void moveToArea(int desiredCoord) {
     if (sensorValue < (desiredCoord - acceptableError)) {
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, HIGH);
-      megaJoyControllerData_t controllerData = getControllerData();
-      setControllerData(controllerData);
+      delay(2);
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, LOW);
     }
+    megaJoyControllerData_t controllerData = getControllerData();
+    setControllerData(controllerData);
     if (sensorValue > (desiredCoord + acceptableError)) {
       digitalWrite(motorA, HIGH);
       digitalWrite(motorB, LOW);
-      megaJoyControllerData_t controllerData = getControllerData();
-      setControllerData(controllerData);
+      delay(20);
       digitalWrite(motorA, LOW);
       digitalWrite(motorB, LOW);
     }
   }
+  digitalWrite(led, LOW);
 }
 
 
